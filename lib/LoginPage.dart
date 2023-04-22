@@ -1,6 +1,8 @@
 import 'package:anti_anxiety/RegisterPage.dart';
 import 'package:anti_anxiety/pasien/Pasien.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:anti_anxiety/login_register_auth/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -10,6 +12,49 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Future<bool> _loginPressed() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _controllerEmail.text,
+        password: _controllerPassword.text,
+      );
+      return userCredential.user !=
+          null; // Check if userCredential.user is not null
+    } catch (e) {
+      // Handle login error, e.g. display error message
+      print('Login error: $e');
+      return false;
+    }
+  }
+
+  void _onLoginButtonPressed() async {
+    bool isLoggedIn = await _loginPressed();
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Pasien()),
+      );
+    }
+  }
+
+  String? errorMessage = '';
+
+  final TextEditingController _controllerEmail = TextEditingController();
+
+  final TextEditingController _controllerPassword = TextEditingController();
+
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await Auth().signInWithEmailAndPassword(
+          email: _controllerEmail.text, password: _controllerPassword.text);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,18 +81,20 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 16.0),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 33.0),
               child: TextField(
+                controller: _controllerEmail,
                 decoration: InputDecoration(
                   hintText: 'Email',
                 ),
               ),
             ),
             const SizedBox(height: 16.0),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 33.0),
               child: TextField(
+                controller: _controllerPassword,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Password',
@@ -63,8 +110,9 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 33.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => Pasien()));
+                    // Navigator.of(context).push(
+                    //     MaterialPageRoute(builder: (context) => Pasien()));
+                    _onLoginButtonPressed();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(20),
@@ -84,16 +132,13 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16.0),
-
             SizedBox(
               width: double.infinity,
               child: TextButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RegisterPage()
-                    ));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => RegisterPage()));
                 },
                 child: RichText(
                   textAlign: TextAlign.center,
@@ -120,7 +165,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-
+            SizedBox(
+              height: 5,
+            ),
+            Text(errorMessage == '' ? '' : 'Huh? ? $errorMessage'),
           ],
         ),
       ),

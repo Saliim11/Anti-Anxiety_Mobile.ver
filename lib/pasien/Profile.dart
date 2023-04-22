@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:anti_anxiety/login_register_auth/auth.dart';
+import 'package:anti_anxiety/LoginPage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -8,8 +11,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  Future<void> signOut() async {
+    Auth auth = Auth();
+    await auth.signOut();
+    // Navigate to login page after signing out
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final User? user = Auth().currentUser;
+    String _userEmail = user?.email ?? '';
     return Scaffold(
       body: Center(
         child: Column(
@@ -44,11 +59,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage('images/profile.jpg'),
+                    // backgroundImage: AssetImage('/assets/psikiater.png'),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Rizky Ramdhan Nugraha',
+                    '$_userEmail',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -81,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 10),
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.of(context).pop();
+                signOut();
               },
               icon: Icon(Icons.logout),
               label: Text('Log Out'),
