@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:anti_anxiety/login_register_auth/auth.dart';
 import 'package:anti_anxiety/LoginPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -11,6 +12,36 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  String _usernameFromFirestore = '';
+  String _userEmail = '';
+  void _getUsernameFromFirestore() async {
+    setState(() {
+      _userEmail = Auth().currentUser?.email ?? '';
+    });
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: _userEmail)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot snapshot = querySnapshot.docs.first;
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      if (data != null) {
+        setState(() {
+          _usernameFromFirestore = data['nama'] ?? '';
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUsernameFromFirestore();
+  }
+
   Future<void> signOut() async {
     Auth auth = Auth();
     await auth.signOut();
@@ -22,8 +53,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = Auth().currentUser;
-    String _userEmail = user?.email ?? '';
+    // final User? user = Auth().currentUser;
+    // String _userEmail = user?.email ?? '';
+    //? Nyoba get from firestore
     return Scaffold(
       body: Center(
         child: Column(
@@ -61,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    '$_userEmail',
+                    _usernameFromFirestore,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

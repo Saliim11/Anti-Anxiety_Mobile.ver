@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:anti_anxiety/login_register_auth/auth.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Home.dart';
 import 'NotePage.dart';
 import 'Profile.dart';
@@ -17,6 +14,36 @@ class Pasien extends StatefulWidget {
 
 class _PasienState extends State<Pasien> {
   int _selectedIndex = 1;
+
+  String _usernameFromFirestore = '';
+  String _userEmail = '';
+  void _getUsernameFromFirestore() async {
+    setState(() {
+      _userEmail = Auth().currentUser?.email ?? '';
+    });
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: _userEmail)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot snapshot = querySnapshot.docs.first;
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      if (data != null) {
+        setState(() {
+          _usernameFromFirestore = data['nama'] ?? '';
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUsernameFromFirestore();
+  }
+
   static const List<Widget> _widgetOptions = <Widget>[
     NotePage(),
     HomePage(),
@@ -31,8 +58,8 @@ class _PasienState extends State<Pasien> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = Auth().currentUser;
-    String _userEmail = user?.email ?? '';
+    // final User? user = Auth().currentUser;
+    // _userEmail = user?.email ?? '';
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -45,15 +72,15 @@ class _PasienState extends State<Pasien> {
                     top: 16,
                     left: 16,
                     child: Text(
-                      'Hello, $_userEmail',
-                      style: TextStyle(
+                      'Hello, $_usernameFromFirestore',
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     top: 16,
                     right: 16,
                     child: CircleAvatar(
@@ -74,10 +101,8 @@ class _PasienState extends State<Pasien> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels:
-            false, 
-        showUnselectedLabels:
-            false, 
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.view_day_sharp),
