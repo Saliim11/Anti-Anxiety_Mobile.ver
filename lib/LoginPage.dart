@@ -11,6 +11,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+String? errMsg = '';
+
 class _LoginPageState extends State<LoginPage> {
   Future<bool> _loginPressed() async {
     try {
@@ -23,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
           null; // Check if userCredential.user is not null
     } catch (e) {
       // Handle login error, e.g. display error message
-      print('Login error: $e');
+      errMsg = e.toString();
       return false;
     }
   }
@@ -38,8 +40,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  String? errorMessage = '';
-
   final TextEditingController _controllerEmail = TextEditingController();
 
   final TextEditingController _controllerPassword = TextEditingController();
@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
           email: _controllerEmail.text, password: _controllerPassword.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        errMsg = e.message;
       });
     }
   }
@@ -91,6 +91,18 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 16.0),
+            // Visibility(
+            //   visible: errMsg != '',
+            //   child: Padding(
+            //     padding: EdgeInsets.symmetric(horizontal: 33.0),
+            //     child: Text(
+            //       errMsg!,
+            //       style: TextStyle(
+            //         color: Colors.red,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 33.0),
               child: TextField(
@@ -101,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+            Text('$errMsg'),
             const SizedBox(
               height: 250,
             ),
@@ -168,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 5,
             ),
-            Text(errorMessage == '' ? '' : 'Huh? ? $errorMessage'),
+            // Text('Login error : $errMsg'),
           ],
         ),
       ),

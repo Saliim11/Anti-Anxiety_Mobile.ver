@@ -15,12 +15,6 @@ class Pasien extends StatefulWidget {
   State<Pasien> createState() => _PasienState();
 }
 
-// final User? user = Auth().currentUser;
-
-// Widget _userUid() {
-//   return Text(user?.email ?? 'User email');
-// }
-
 class _PasienState extends State<Pasien> {
   int _selectedIndex = 1;
   static const List<Widget> _widgetOptions = <Widget>[
@@ -29,25 +23,11 @@ class _PasienState extends State<Pasien> {
     ProfilePage(),
   ];
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   FirebaseAuth.instance.authStateChanges().listen((User? user) {
-  //     setState(() {
-  //       _userEmail = user?.email ?? '';
-  //     });
-  //   });
-  // }
-
-  // String _userEmail = '';
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-
-  // final _userEmail = user?.email ?? '';
 
   @override
   Widget build(BuildContext context) {
@@ -95,9 +75,9 @@ class _PasienState extends State<Pasien> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels:
-            false, //  label item pada saat terpilih akan disembunyikan
+            false, 
         showUnselectedLabels:
-            false, // label item pada saat tidak terpilih juga akan disembunyikan
+            false, 
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.view_day_sharp),

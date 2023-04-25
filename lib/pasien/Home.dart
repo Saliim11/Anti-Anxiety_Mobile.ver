@@ -44,13 +44,6 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ElevatedButton(
-              //   onPressed: signOut,
-              //   child: const Text('Sign Out'),
-              //   style: ButtonStyle(
-              //     minimumSize: MaterialStateProperty.all(Size(50, 36)),
-              //   ),
-              // ),
               CardButton(
                 title: 'Consult Now\nPsikolog',
                 imagePath: 'assets/psikolog.png',

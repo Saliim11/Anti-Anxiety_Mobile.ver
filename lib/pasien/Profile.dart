@@ -14,7 +14,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> signOut() async {
     Auth auth = Auth();
     await auth.signOut();
-    // Navigate to login page after signing out
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
@@ -30,7 +29,6 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // SizedBox(height: 20),
             Text(
               'Profil',
               style: TextStyle(
