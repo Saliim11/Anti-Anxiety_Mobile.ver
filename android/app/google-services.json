@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "300015654155",
+    "project_id": "anti-anxiety-aa6e5",
+    "storage_bucket": "anti-anxiety-aa6e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300015654155:android:2950ec455903e156a23e0e",
+        "android_client_info": {
+          "package_name": "com.example.anti_anxiety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300015654155-fs0hbbon06dq1jn6rad1gb97uanbi624.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtKj3XwvlpHuFYw2msjkk0ZyyFzu-y1Uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300015654155-fs0hbbon06dq1jn6rad1gb97uanbi624.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
