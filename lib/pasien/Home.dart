@@ -1,5 +1,8 @@
+import 'package:anti_anxiety/login_register_auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:anti_anxiety/LoginPage.dart';
 
 import 'Detailberita.dart';
 
@@ -12,6 +15,8 @@ final List<String> imgList = [
   'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
 ];
 
+final User? user = Auth().currentUser;
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -20,6 +25,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // Future<void> signOut() async {
+  //   Auth auth = Auth();
+  //   await auth.signOut();
+  //   // Navigate to login page after signing out
+  //   Navigator.pushReplacement(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => LoginPage()),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

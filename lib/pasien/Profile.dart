@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:anti_anxiety/login_register_auth/auth.dart';
+import 'package:anti_anxiety/LoginPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -8,14 +12,55 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  String _usernameFromFirestore = '';
+  String _userEmail = '';
+  void _getUsernameFromFirestore() async {
+    setState(() {
+      _userEmail = Auth().currentUser?.email ?? '';
+    });
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: _userEmail)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot snapshot = querySnapshot.docs.first;
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      if (data != null) {
+        setState(() {
+          _usernameFromFirestore = data['nama'] ?? '';
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUsernameFromFirestore();
+  }
+
+  Future<void> signOut() async {
+    Auth auth = Auth();
+    await auth.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // final User? user = Auth().currentUser;
+    // String _userEmail = user?.email ?? '';
+    //? Nyoba get from firestore
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // SizedBox(height: 20),
             Text(
               'Profil',
               style: TextStyle(
@@ -44,11 +89,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage('images/profile.jpg'),
+                    // backgroundImage: AssetImage('/assets/psikiater.png'),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Rizky Ramdhan Nugraha',
+                    _usernameFromFirestore,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -81,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 10),
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.of(context).pop();
+                signOut();
               },
               icon: Icon(Icons.logout),
               label: Text('Log Out'),
