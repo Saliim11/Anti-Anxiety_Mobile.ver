@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:anti_anxiety/login_register_auth/auth.dart';
 import 'package:anti_anxiety/LoginPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'EditProfile.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -12,7 +11,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   String _usernameFromFirestore = '';
   String _userEmail = '';
   void _getUsernameFromFirestore() async {
@@ -111,7 +109,10 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 125),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfile()));
+              },
               icon: Icon(Icons.person),
               label: Text('Edit Profile'),
               style: ElevatedButton.styleFrom(
@@ -145,3 +146,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
