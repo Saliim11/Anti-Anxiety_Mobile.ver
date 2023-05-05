@@ -3,6 +3,8 @@ import 'package:anti_anxiety/login_register_auth/auth.dart';
 import 'package:anti_anxiety/LoginPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'EditProfile.dart';
+import 'dart:async';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -13,7 +15,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String _usernameFromFirestore = '';
   String _userEmail = '';
-  void _getUsernameFromFirestore() async {
+
+  Stream<String> _getUsernameFromFirestore() async* {
     setState(() {
       _userEmail = Auth().currentUser?.email ?? '';
     });
@@ -27,17 +30,29 @@ class _ProfilePageState extends State<ProfilePage> {
       DocumentSnapshot snapshot = querySnapshot.docs.first;
       Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
       if (data != null) {
+        String username = data['nama'] ?? '';
         setState(() {
-          _usernameFromFirestore = data['nama'] ?? '';
+          _usernameFromFirestore = username;
         });
+        yield username;
       }
     }
   }
 
+  StreamSubscription<String>? _subscription;
+
   @override
   void initState() {
     super.initState();
-    _getUsernameFromFirestore();
+    _subscription = _getUsernameFromFirestore().listen((String username) {
+      // do something with the new username
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 
   Future<void> signOut() async {
@@ -146,4 +161,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
