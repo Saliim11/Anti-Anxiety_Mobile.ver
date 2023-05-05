@@ -11,9 +11,23 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-String? errMsg = '';
-
 class _LoginPageState extends State<LoginPage> {
+  String? errMsgLogin1 = '';
+  String? errMsgLogin2 = '';
+  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
+
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await Auth().signInWithEmailAndPassword(
+          email: _controllerEmail.text, password: _controllerPassword.text);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errMsgLogin1 = e.message;
+      });
+    }
+  }
+
   Future<bool> _loginPressed() async {
     try {
       UserCredential userCredential =
@@ -25,7 +39,9 @@ class _LoginPageState extends State<LoginPage> {
           null; // Check if userCredential.user is not null
     } catch (e) {
       // Handle login error, e.g. display error message
-      errMsg = e.toString();
+      setState(() {
+        errMsgLogin2 = e.toString();
+      });
       return false;
     }
   }
@@ -37,21 +53,6 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => Pasien()),
       );
-    }
-  }
-
-  final TextEditingController _controllerEmail = TextEditingController();
-
-  final TextEditingController _controllerPassword = TextEditingController();
-
-  Future<void> signInWithEmailAndPassword() async {
-    try {
-      await Auth().signInWithEmailAndPassword(
-          email: _controllerEmail.text, password: _controllerPassword.text);
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errMsg = e.message;
-      });
     }
   }
 
@@ -113,7 +114,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            Text('$errMsg'),
+            Text('$errMsgLogin1'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Text('$errMsgLogin2'),
+            ),
             const SizedBox(
               height: 250,
             ),
