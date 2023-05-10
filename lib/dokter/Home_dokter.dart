@@ -40,24 +40,14 @@ int _current = 0;
 
 final User? user = Auth().currentUser;
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePageDokter extends StatefulWidget {
+  const HomePageDokter({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePageDokter> createState() => _HomePageDokterState();
 }
 
-class _HomePageState extends State<HomePage> {
-  // Future<void> signOut() async {
-  //   Auth auth = Auth();
-  //   await auth.signOut();
-  //   // Navigate to login page after signing out
-  //   Navigator.pushReplacement(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => LoginPage()),
-  //   );
-  // }
-
+class _HomePageDokterState extends State<HomePageDokter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,21 +58,13 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               CardButton(
-                title: 'Consult Now\nPsikolog',
-                imagePath: 'assets/psikolog.png',
+                title: 'Consult Now\nPatient',
+                imagePath: 'assets/pasien.png',
                 onTap: () {
                   // untuk trigger
                 },
               ),
-              SizedBox(height: 16),
-              CardButton(
-                title: 'Consult Now\nPsikiater',
-                imagePath: 'assets/psikiater.png',
-                onTap: () {
-                  // untuk trigger
-                },
-              ),
-              SizedBox(height: 16),
+              SizedBox(height: 180),
               Text(
                 'BERITA', // Text berita
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),

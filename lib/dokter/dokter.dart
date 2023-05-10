@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:anti_anxiety/login_register_auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'Home.dart';
+import 'Home_dokter.dart';
 import 'NotePage.dart';
 import 'Profile.dart';
 
@@ -46,7 +46,7 @@ class _PasienState extends State<Pasien> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     NotePage(),
-    HomePage(),
+    HomePageDokter(),
     ProfilePage(),
   ];
 
