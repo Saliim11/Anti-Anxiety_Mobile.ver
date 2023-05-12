@@ -1,4 +1,4 @@
-import 'package:anti_anxiety/login_register_auth/auth.dart';
+import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:anti_anxiety/pasien/Home.dart';
 import 'package:anti_anxiety/LoginPage.dart';
 import 'package:anti_anxiety/pasien/Pasien.dart';

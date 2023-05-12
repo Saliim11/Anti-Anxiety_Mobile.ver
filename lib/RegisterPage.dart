@@ -161,7 +161,7 @@
 import 'package:anti_anxiety/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:anti_anxiety/login_register_auth/auth.dart';
+import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

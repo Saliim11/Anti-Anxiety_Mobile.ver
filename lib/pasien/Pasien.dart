@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:anti_anxiety/login_register_auth/auth.dart';
+import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Home.dart';
 import 'NotePage.dart';
-import 'Profile.dart';
+import '../Profile.dart';
 
 class Pasien extends StatefulWidget {
   const Pasien({Key? key}) : super(key: key); // Fix the constructor usage here

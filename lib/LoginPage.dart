@@ -2,7 +2,7 @@ import 'package:anti_anxiety/RegisterPage.dart';
 import 'package:anti_anxiety/pasien/Pasien.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:anti_anxiety/login_register_auth/auth.dart';
+import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
