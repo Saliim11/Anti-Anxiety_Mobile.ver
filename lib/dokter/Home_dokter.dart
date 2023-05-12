@@ -1,40 +1,6 @@
 import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-List<Map<String, dynamic>> _beritaList = [
-  {
-    'judul': 'Berita 1',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-  {
-    'judul': 'Berita 2',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-  {
-    'judul': 'Berita 3',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-  {
-    'judul': 'Berita 4',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-  {
-    'judul': 'Berita 5',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-];
 
 int _current = 0;
 
@@ -53,94 +19,94 @@ class _HomePageDokterState extends State<HomePageDokter> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               CardButton(
-                title: 'Consult Now\nPatient',
+                title: 'Patient Consult',
                 imagePath: 'assets/pasien.png',
                 onTap: () {
                   // untuk trigger
                 },
               ),
-              SizedBox(height: 180),
-              Text(
-                'BERITA', // Text berita
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              CarouselSlider(
-                items: _beritaList.map((berita) {
-                  return GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) {
-                          return AlertDialog(
-                            title: Text(berita['judul']),
-                            content: Text(berita['konten']),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Tutup'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(5),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          berita['gambar'],
-                          fit: BoxFit.cover,
-                          width: 500,
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2 - 20,
+                    height: 54,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // untuk trigger
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFFBCBCBC),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: Text(
+                        'Chat Pasien',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  );
-                }).toList(),
-                options: CarouselOptions(
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                  aspectRatio: 2.0,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _current = index;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(height: 6),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: _beritaList.map((berita) {
-                  int index = _beritaList.indexOf(berita);
-                  return Container(
-                    width: 10,
-                    height: 10,
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color:
-                          _current == index ? Colors.blueAccent : Colors.grey,
+                  ),
+                  SizedBox(width: 16),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2 - 20,
+                    height: 54,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // untuk trigger
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFFBCBCBC),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: Text(
+                        'Consultation Notes',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  );
-                }).toList(),
+                  ),
+                ],
               ),
-              InkWell(
-                onTap: () {},
-                child: Text(
-                  'Selengkapnya..', // Text berita
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+              SizedBox(height: 16),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2 - 20,
+                height: 54,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // untuk trigger
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFBCBCBC),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: Text(
+                    'Finish Consultation',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),
