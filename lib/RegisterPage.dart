@@ -162,6 +162,7 @@ import 'package:anti_anxiety/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -177,10 +178,39 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _controllerPassword = TextEditingController();
 
-  Future<void> createUserWithEmailAndPassword() async {
-    try {
-      await Auth().createUserWithEmailAndPassword(
-          email: _controllerEmail.text, password: _controllerPassword.text);
+  // Future<void> createUserWithEmailAndPassword() async {
+  //   try {
+  //     await Auth().createUserWithEmailAndPassword(
+  //         email: _controllerEmail.text, password: _controllerPassword.text);
+  //     Navigator.of(context).pushReplacement(
+  //       MaterialPageRoute(
+  //         builder: (context) => LoginPage(),
+  //       ),
+  //     );
+  //   } on FirebaseAuthException catch (e) {
+  //     setState(() {
+  //       errorMessage = e.message;
+  //     });
+  //   }
+  // }
+
+  Future<void> createUserWithEmailAndPassword(_RadioUsersState radioState) async {
+  try {
+      UserCredential userCredential =
+          await Auth().createUserWithEmailAndPassword(
+              email: _controllerEmail.text,
+              password: _controllerPassword.text);
+
+      // Create a new document in the "users" collection with the user's email, password, and role
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'email': _controllerEmail.text,
+        'password': _controllerPassword.text,
+        'role' : radioState.getSelectedValue(),
+      });
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => LoginPage(),
@@ -192,6 +222,8 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +270,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
               ElevatedButton(
                 onPressed: () {
-                  createUserWithEmailAndPassword();
+                  createUserWithEmailAndPassword(_RadioUsersState());
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF01365A),
@@ -317,5 +349,9 @@ class _RadioUsersState extends State<RadioUsers> {
         ),
       ],
     );
+  }
+
+  String getSelectedValue() {
+    return _character.toString().split('.').last;
   }
 }
