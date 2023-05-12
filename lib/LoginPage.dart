@@ -3,6 +3,7 @@ import 'package:anti_anxiety/pasien/Pasien.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -47,14 +48,33 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onLoginButtonPressed() async {
-    bool isLoggedIn = await _loginPressed();
-    if (isLoggedIn) {
+  bool isLoggedIn = await _loginPressed();
+  if (isLoggedIn) {
+    // Get the current user's document from Firestore
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    // Get the user's role from the document
+    final role = userDoc['role'];
+
+    // Navigate to the appropriate screen based on the user's role
+    if (role == 'Pasien') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Pasien()),
       );
-    }
+    } 
+    // else if (role == 'doctor') {
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => Doctor()),
+    //   );
+    // }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
