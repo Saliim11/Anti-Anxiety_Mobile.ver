@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:anti_anxiety/LoginPage.dart';
-
+import 'Detaildokter.dart';
 import 'Detailberita.dart';
 
 List<Map<String, dynamic>> _beritaList = [
@@ -74,7 +74,8 @@ class _HomePageState extends State<HomePage> {
                 title: 'Consult Now\nPsikolog',
                 imagePath: 'assets/psikolog.png',
                 onTap: () {
-                  // untuk trigger
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => DetailDokter()));
                 },
               ),
               SizedBox(height: 16),
@@ -82,7 +83,8 @@ class _HomePageState extends State<HomePage> {
                 title: 'Consult Now\nPsikiater',
                 imagePath: 'assets/psikiater.png',
                 onTap: () {
-                  // untuk trigger
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => DetailDokter()));
                 },
               ),
               SizedBox(height: 16),
