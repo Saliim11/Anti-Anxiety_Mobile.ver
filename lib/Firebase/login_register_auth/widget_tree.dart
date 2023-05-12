@@ -1,4 +1,4 @@
-import 'package:anti_anxiety/login_register_auth/auth.dart';
+import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:anti_anxiety/pasien/Home.dart';
 import 'package:anti_anxiety/LoginPage.dart';
 import 'package:anti_anxiety/pasien/Pasien.dart';
@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class WidgetTree extends StatefulWidget {
   const WidgetTree({Key? key})
-      : super(key: key); // Fix the constructor usage here
+      : super(key: key); 
 
   @override
   State<WidgetTree> createState() => _WidgetTreeState();

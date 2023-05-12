@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'Home.dart';
-import 'NotePage.dart';
+import 'Home_dokter.dart';
 import '../Profile.dart';
+import '../pasien/NotePage.dart';
 
 class Pasien extends StatefulWidget {
   const Pasien({Key? key}) : super(key: key); // Fix the constructor usage here
@@ -46,7 +46,7 @@ class _PasienState extends State<Pasien> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     NotePage(),
-    HomePage(),
+    HomePageDokter(),
     ProfilePage(),
   ];
 
