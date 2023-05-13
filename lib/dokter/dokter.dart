@@ -3,17 +3,16 @@ import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Home_dokter.dart';
 import '../Profile.dart';
-import '../pasien/NotePage.dart';
 
-class Pasien extends StatefulWidget {
-  const Pasien({Key? key}) : super(key: key); // Fix the constructor usage here
+class Dokter extends StatefulWidget {
+  const Dokter({Key? key}) : super(key: key); // Fix the constructor usage here
 
   @override
-  State<Pasien> createState() => _PasienState();
+  State<Dokter> createState() => _DokterState();
 }
 
-class _PasienState extends State<Pasien> {
-  int _selectedIndex = 1;
+class _DokterState extends State<Dokter> {
+  int _selectedIndex = 0;
 
   String _usernameFromFirestore = '';
   String _userEmail = '';
@@ -45,7 +44,6 @@ class _PasienState extends State<Pasien> {
   }
 
   static const List<Widget> _widgetOptions = <Widget>[
-    NotePage(),
     HomePageDokter(),
     ProfilePage(),
   ];
@@ -104,10 +102,6 @@ class _PasienState extends State<Pasien> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.view_day_sharp),
-            label: 'Note',
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',

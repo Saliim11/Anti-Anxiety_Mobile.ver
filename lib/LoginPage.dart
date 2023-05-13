@@ -1,9 +1,12 @@
 import 'package:anti_anxiety/RegisterPage.dart';
+import 'package:anti_anxiety/dokter/Home_dokter.dart';
 import 'package:anti_anxiety/pasien/Pasien.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'dokter/dokter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -65,13 +68,12 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => Pasien()),
       );
-    } 
-    // else if (role == 'doctor') {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => Doctor()),
-    //   );
-    // }
+    } else if (role == 'doctor') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Dokter()),
+      );
+    }
   }
 }
 
