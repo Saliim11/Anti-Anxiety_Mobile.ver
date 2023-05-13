@@ -250,7 +250,9 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: SingleChildScrollView(
-            child: Column(children: [
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
@@ -277,18 +279,18 @@ class _RegisterPageState extends State<RegisterPage> {
 
               // input password
               TextField(
-                controller: _controllerEmail,
+                controller: _controllerPassword,
+                obscureText: true,
                 decoration: const InputDecoration(
-                  label: Text('Email'),
+                  label: Text('Password'),
                 ),
               ),
 
               // input email
               TextField(
-                controller: _controllerPassword,
-                obscureText: true,
+                controller: _controllerEmail,
                 decoration: const InputDecoration(
-                  label: Text('Password'),
+                  label: Text('Email'),
                 ),
               ),
 
