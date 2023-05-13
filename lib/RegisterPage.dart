@@ -174,9 +174,16 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   String? errorMessage = '';
 
-  final TextEditingController _controllerEmail = TextEditingController();
-
+  final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerNama = TextEditingController();
+  final TextEditingController _controllerTglLahir = TextEditingController();
+  final TextEditingController _controllerUsia = TextEditingController();
+  final TextEditingController _controllerKontak = TextEditingController();
+  final TextEditingController _controllerAlamat = TextEditingController();
+  final TextEditingController _controllerKota = TextEditingController();
+
 
   // Future<void> createUserWithEmailAndPassword() async {
   //   try {
@@ -205,10 +212,21 @@ class _RegisterPageState extends State<RegisterPage> {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
-          .set({
-        'email': _controllerEmail.text,
-        'password': _controllerPassword.text,
-        'role' : radioState.getSelectedValue(),
+          .set(
+            {
+              'username': _controllerUsername,
+              'password': _controllerPassword.text,
+              'email': _controllerEmail.text,
+              'nama': _controllerNama.text,
+              'tglLahir': _controllerTglLahir.text,
+              'role' : radioState.getSelectedValue(),
+              'usia': _controllerUsia.text,
+              'kontak': _controllerKontak.text,
+              'alamat': _controllerAlamat.text,
+              'kota': _controllerKota.text,
+              'stat_login': "off",
+              'connect_id': ""
+
       });
 
       Navigator.of(context).pushReplacement(
@@ -232,7 +250,9 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: SingleChildScrollView(
-            child: Column(children: [
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
@@ -249,24 +269,86 @@ class _RegisterPageState extends State<RegisterPage> {
                 width: 300,
               ),
 
-              // input password
+              // input username
               TextField(
-                controller: _controllerEmail,
-                decoration: InputDecoration(
-                  label: Text('Email'),
+                controller: _controllerUsername,
+                decoration: const InputDecoration(
+                  label: Text('Username'),
                 ),
               ),
-              // input email
+
+              // input password
               TextField(
                 controller: _controllerPassword,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   label: Text('Password'),
                 ),
               ),
 
-              // const SizedBox(height: 20),
+              // input email
+              TextField(
+                controller: _controllerEmail,
+                decoration: const InputDecoration(
+                  label: Text('Email'),
+                ),
+              ),
+
+              // input nama
+              TextField(
+                controller: _controllerNama,
+                decoration: const InputDecoration(
+                  label: Text('Nama'),
+                ),
+              ),
+
+              // date picker
+              TextField(
+                controller: _controllerTglLahir,
+                decoration: const InputDecoration(
+                  label: Text('Tgl Lahir *yyyy-MM-dd'),
+                ),
+              ),
+
+              // RadioButton Role
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text("Role")),
               const RadioUsers(),
+
+              // input usia
+              TextField(
+                controller: _controllerUsia,
+                decoration: const InputDecoration(
+                  label: Text('Usia'),
+                ),
+              ),
+
+              // input kontak
+              TextField(
+                controller: _controllerKontak,
+                decoration: const InputDecoration(
+                  label: Text('No Kontak'),
+                ),
+              ),
+
+              // input alamat
+              TextField(
+                controller: _controllerAlamat,
+                decoration: const InputDecoration(
+                  label: Text('Alamat'),
+                ),
+              ),
+
+              // input kota
+              TextField(
+                controller: _controllerKota,
+                decoration: const InputDecoration(
+                  label: Text('Kota'),
+                ),
+              ), 
+
+              SizedBox(height: 40),
 
               ElevatedButton(
                 onPressed: () {
