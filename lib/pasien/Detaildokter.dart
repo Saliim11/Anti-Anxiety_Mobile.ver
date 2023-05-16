@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../chat.dart';
+
 class DetailDokter extends StatefulWidget {
   const DetailDokter({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class _DetailDokterState extends State<DetailDokter> {
         leading: GestureDetector(
           child: Icon(
             Icons.arrow_back_ios,
-            color: Colors.black,
+            color: Colors.white,
           ),
           onTap: () {
             Navigator.pop(context);
@@ -52,9 +54,12 @@ class _DetailDokterState extends State<DetailDokter> {
             ),
             SizedBox(height: 32),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => ChatPage()));
+              },
               icon: Icon(Icons.chat),
-              label: Text('Cek Dokter'),
+              label: Text('Chat Dokter'),
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all<Color>(Color(0xFF01365A)),
