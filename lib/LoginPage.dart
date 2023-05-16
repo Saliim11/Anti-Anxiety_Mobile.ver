@@ -50,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  // ----------------------------------------------------------------------Method Login---------------------------------------------------------------------------------
   void _onLoginButtonPressed() async {
   bool isLoggedIn = await _loginPressed();
   if (isLoggedIn) {
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => Pasien()),
       );
-    } else if (role == 'doctor') {
+    } else if (role == 'Dokter') {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Dokter()),
