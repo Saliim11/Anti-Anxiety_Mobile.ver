@@ -52,31 +52,32 @@ class _LoginPageState extends State<LoginPage> {
 
   // ----------------------------------------------------------------------Method Login---------------------------------------------------------------------------------
   void _onLoginButtonPressed() async {
-    bool isLoggedIn = await _loginPressed();
-    if (isLoggedIn) {
-      // Get the current user's document from Firestore
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
+  bool isLoggedIn = await _loginPressed();
+  if (isLoggedIn && mounted) {
+    // Get the current user's document from Firestore
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
 
-      // Get the user's role from the document
-      final role = userDoc['role'];
+    // Get the user's role from the document
+    final role = userDoc['role'];
 
-      // Navigate to the appropriate screen based on the user's role
-      if (role == 'Pasien') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Pasien()),
-        );
-      } else if (role == 'Dokter') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Dokter()),
-        );
-      }
+    // Navigate to the appropriate screen based on the user's role
+    if (role == 'Pasien') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Pasien()),
+      );
+    } else if (role == 'Dokter') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Dokter()),
+      );
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
