@@ -52,32 +52,31 @@ class _LoginPageState extends State<LoginPage> {
 
   // ----------------------------------------------------------------------Method Login---------------------------------------------------------------------------------
   void _onLoginButtonPressed() async {
-  bool isLoggedIn = await _loginPressed();
-  if (isLoggedIn) {
-    // Get the current user's document from Firestore
-    final userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    bool isLoggedIn = await _loginPressed();
+    if (isLoggedIn) {
+      // Get the current user's document from Firestore
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
 
-    // Get the user's role from the document
-    final role = userDoc['role'];
+      // Get the user's role from the document
+      final role = userDoc['role'];
 
-    // Navigate to the appropriate screen based on the user's role
-    if (role == 'Pasien') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Pasien()),
-      );
-    } else if (role == 'Dokter') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Dokter()),
-      );
+      // Navigate to the appropriate screen based on the user's role
+      if (role == 'Pasien') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Pasien()),
+        );
+      } else if (role == 'Dokter') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Dokter()),
+        );
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(20),
                     foregroundColor: Colors.white,
-                    backgroundColor: const Color.fromARGB(255, 3, 40, 82),
+                    backgroundColor: const Color(0xFF01365A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
