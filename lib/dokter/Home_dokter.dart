@@ -1,19 +1,57 @@
 import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-int _current = 0;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 final User? user = Auth().currentUser;
-
+String namaPasien = "";
 class HomePageDokter extends StatefulWidget {
-  const HomePageDokter({super.key});
+  const HomePageDokter({Key? key}) : super(key: key);
 
   @override
   State<HomePageDokter> createState() => _HomePageDokterState();
 }
 
 class _HomePageDokterState extends State<HomePageDokter> {
+  bool isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+  try {
+    final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+
+    final connectId = userSnapshot.get('connect_id');
+    print("Ini connectID : $connectId");
+
+    if (connectId != '') {
+      final DocumentSnapshot pasienSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(connectId)
+          .get();
+      namaPasien = pasienSnapshot.get('nama');
+    }
+
+    if (connectId == '') {
+      namaPasien = "";
+    }
+
+    setState(() {
+      isButtonEnabled = connectId != '';
+    });
+  } catch (e) {
+    print('Error fetching user data: $e');
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +62,7 @@ class _HomePageDokterState extends State<HomePageDokter> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               CardButton(
-                title: 'Patient Consult',
+                title: namaPasien,
                 imagePath: 'assets/pasien.png',
                 onTap: () {
                   // untuk trigger
@@ -38,11 +76,13 @@ class _HomePageDokterState extends State<HomePageDokter> {
                     width: MediaQuery.of(context).size.width / 2 - 20,
                     height: 54,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // untuk trigger
-                      },
+                      onPressed: isButtonEnabled
+                          ? () {
+                              // untuk trigger
+                            }
+                          : null,
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFFBCBCBC),
+                        primary: isButtonEnabled ? Color(0xFF01365A) : Colors.grey,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -62,11 +102,13 @@ class _HomePageDokterState extends State<HomePageDokter> {
                     width: MediaQuery.of(context).size.width / 2 - 20,
                     height: 54,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // untuk trigger
-                      },
+                      onPressed: isButtonEnabled
+                          ? () {
+                              // untuk trigger
+                            }
+                          : null,
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFFBCBCBC),
+                        primary: isButtonEnabled ? Color(0xFF01365A) : Colors.grey,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -88,11 +130,13 @@ class _HomePageDokterState extends State<HomePageDokter> {
                 width: MediaQuery.of(context).size.width / 2 - 20,
                 height: 54,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // untuk trigger
-                  },
+                  onPressed: isButtonEnabled
+                      ? () {
+                          // untuk trigger
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFFBCBCBC),
+                    primary: isButtonEnabled ? Color(0xFF01365A) : Colors.grey,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),

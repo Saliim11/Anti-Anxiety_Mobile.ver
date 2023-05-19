@@ -15,6 +15,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String _usernameFromFirestore = '';
   String _userEmail = '';
+  String _role = '';
 
   Stream<String> _getUsernameFromFirestore() async* {
     setState(() {
@@ -66,8 +67,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final User? user = Auth().currentUser;
-    // String _userEmail = user?.email ?? '';
     //? Nyoba get from firestore
     return Scaffold(
       body: Center(
