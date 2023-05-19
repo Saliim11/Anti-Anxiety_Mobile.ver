@@ -369,6 +369,27 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 300,
                   width: 300,
                 ),
+                // input nama
+                TextField(
+                  controller: _controllerNama,
+                  decoration: const InputDecoration(
+                    labelText: 'Nama Lengkap',
+                  ),
+                ),
+                // date picker
+                TextField(
+                  controller: _controllerTglLahir,
+                  decoration: const InputDecoration(
+                    labelText: 'Tgl Lahir *yyyy-MM-dd',
+                  ),
+                ),
+                // input email
+                TextField(
+                  controller: _controllerEmail,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                  ),
+                ),
                 // input username
                 TextField(
                   controller: _controllerUsername,
@@ -384,31 +405,47 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: 'Password',
                   ),
                 ),
-                // input email
+                // input usia
                 TextField(
-                  controller: _controllerEmail,
+                  controller: _controllerUsia,
                   decoration: const InputDecoration(
-                    labelText: 'Email',
+                    labelText: 'Usia',
                   ),
                 ),
-                // input nama
+                // input kontak
                 TextField(
-                  controller: _controllerNama,
+                  controller: _controllerKontak,
                   decoration: const InputDecoration(
-                    labelText: 'Nama',
+                    labelText: 'No Kontak',
                   ),
                 ),
-                // date picker
+                // input alamat
                 TextField(
-                  controller: _controllerTglLahir,
+                  controller: _controllerAlamat,
                   decoration: const InputDecoration(
-                    labelText: 'Tgl Lahir *yyyy-MM-dd',
+                    labelText: 'Alamat',
                   ),
                 ),
-// RadioButton Role
+                // input kota
+                TextField(
+                  controller: _controllerKota,
+                  decoration: const InputDecoration(
+                    labelText: 'Kota',
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                // RadioButton Role
                 Container(
                   margin: EdgeInsets.only(top: 10),
-                  child: Text("Role"),
+                  child: Text(
+                    "Role",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 RadioUsers(
                   onValueChanged: (selectedValue) {
@@ -417,63 +454,65 @@ class _RegisterPageState extends State<RegisterPage> {
                     });
                   },
                 ),
-// input usia
-                TextField(
-                  controller: _controllerUsia,
-                  decoration: const InputDecoration(
-                    labelText: 'Usia',
-                  ),
-                ),
-// input kontak
-                TextField(
-                  controller: _controllerKontak,
-                  decoration: const InputDecoration(
-                    labelText: 'No Kontak',
-                  ),
-                ),
-// input alamat
-                TextField(
-                  controller: _controllerAlamat,
-                  decoration: const InputDecoration(
-                    labelText: 'Alamat',
-                  ),
-                ),
-// input kota
-                TextField(
-                  controller: _controllerKota,
-                  decoration: const InputDecoration(
-                    labelText: 'Kota',
-                  ),
-                ),
                 SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: () {
-                    createUserWithEmailAndPassword();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF01365A),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Container(
-                    height: 50,
-                    width: 300,
-                    child: const Center(child: Text("Sign Up")),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Text(errorMessage == '' ? '' : 'Error: $errorMessage'),
-                const SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                  child: const Text(
-                    "Already have an account? Sign In",
-                    style: TextStyle(fontSize: 16.0, color: Colors.black),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          createUserWithEmailAndPassword();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF01365A),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Container(
+                          height: 50,
+                          width: 300,
+                          child: const Center(child: Text("Sign Up")),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(errorMessage == '' ? '' : 'Error: $errorMessage'),
+                      const SizedBox(height: 20),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                          );
+                        },
+                        // child: const Text(
+                        //   "Already have an account? Sign In",
+                        //   style: TextStyle(fontSize: 16.0, color: Colors.black),
+                        // ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Already have an account?",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black,
+                                  fontSize: 16),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Login",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
