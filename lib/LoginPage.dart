@@ -115,18 +115,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 16.0),
-            // Visibility(
-            //   visible: errMsg != '',
-            //   child: Padding(
-            //     padding: EdgeInsets.symmetric(horizontal: 33.0),
-            //     child: Text(
-            //       errMsg!,
-            //       style: TextStyle(
-            //         color: Colors.red,
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 33.0),
               child: TextField(
