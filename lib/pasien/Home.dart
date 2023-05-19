@@ -325,19 +325,28 @@ class _HomePageState extends State<HomePage> {
   Future<void> updateConnectId(String role) async {
     final random = Random();
 
-    // Fetch users with the specified role from Firestore
-    final userSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .where('role', isEqualTo: role)
-        .get();
+    // Fetch users with the specified role and empty connect_id from Firestore
+    QuerySnapshot userSnapshot;
+    DocumentSnapshot selectedUser;
 
-    if (userSnapshot.docs.isEmpty) {
-      return; // No user with the specified role found
-    }
+    do {
+      userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('role', isEqualTo: role)
+          .where('connect_id', isEqualTo: "")
+          .get();
 
-    // Select a random user from the fetched list
-    final randomIndex = random.nextInt(userSnapshot.docs.length);
-    final selectedUser = userSnapshot.docs[randomIndex];
+      if (userSnapshot.docs.isEmpty) {
+        selectedDoctor =
+            "Maaf tidak ditemukan!"; // No user with empty connect_id found
+        return; // Return without making any changes to the database
+      }
+
+      // Select a random user from the fetched list
+      final randomIndex = random.nextInt(userSnapshot.docs.length);
+      selectedUser = userSnapshot.docs[randomIndex];
+    } while (selectedUser['connect_id'] != "");
+
     final selectedUserId = selectedUser.id;
     final currentUserUid =
         user?.uid; // Assuming 'user' is the current user object
