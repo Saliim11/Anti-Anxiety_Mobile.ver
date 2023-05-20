@@ -6,7 +6,7 @@ import 'pasien/EditProfile.dart';
 import 'dart:async';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -65,9 +65,46 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  bool isConnected = false;
+
+  void checkConnectID() async {
+    final currentUserUid = Auth().currentUser?.uid;
+
+    if (currentUserUid != null) {
+      final currentUserSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserUid)
+          .get();
+
+      if (currentUserSnapshot.exists) {
+        final connectID = currentUserSnapshot['connect_id'];
+
+        if (connectID.isNotEmpty) {
+          final connectUserSnapshot = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(connectID)
+              .get();
+
+          if (mounted && connectUserSnapshot.exists) {
+            setState(() {
+              isConnected = true;
+            });
+          }
+        } else {
+          if (mounted) {
+            setState(() {
+              isConnected = false;
+            });
+          }
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    //? Nyoba get from firestore
+    checkConnectID();
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -160,3 +197,4 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
+
