@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'dart:async';
 
 class HomePageAdmin extends StatefulWidget {
-  const HomePageAdmin({Key? key}) : super(key: key);  // Add 'const' here
+  const HomePageAdmin({Key? key}) : super(key: key); // Add 'const' here
 
   @override
   State<HomePageAdmin> createState() => _HomePageAdminState();
 }
-
 
 class _HomePageAdminState extends State<HomePageAdmin> {
   @override
@@ -32,29 +31,57 @@ class DetailNews extends StatefulWidget {
   State<DetailNews> createState() => _DetailNewsState();
 }
 
-List<Map<String, dynamic>> dataList = [
-  {
-    "Nama": "tanda-tanda anxiety",
-    "Kelas1": "Lorem Ipsum",
-    "kelas2":
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-  },
-  {
-    "Nama": "gejala anxiety",
-    "Kelas1": "Lorem Ipsum",
-    "kelas2":
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-  },
-];
-List<String> warna = [' blue', ' yellow ', 'green'];
+// List<Map<String, dynamic>> dataList = [
+//   {
+//     "Nama": "tanda-tanda anxiety",
+//     "Kelas1": "Lorem Ipsum",
+//     "kelas2":
+//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+//   },
+//   {
+//     "Nama": "gejala anxiety",
+//     "Kelas1": "Lorem Ipsum",
+//     "kelas2":
+//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+//   },
+// ];
+// List<String> warna = [' blue', ' yellow ', 'green'];
 var title = TextEditingController();
 var platform = TextEditingController();
 var lang = TextEditingController();
 
 class _DetailNewsState extends State<DetailNews> {
+  List<Map<String, dynamic>> dataList = [];
+  late StreamSubscription<List<Map<String, dynamic>>> subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDataFromFirestore();
+  }
+
+  StreamSubscription<List<Map<String, dynamic>>> fetchDataFromFirestore() {
+    return FirebaseFirestore.instance
+        .collection('informasi')
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        return {
+          "Judul": doc['judul'],
+          "Source": doc['source'],
+          "Isi": doc['isi'],
+        };
+      }).toList();
+    }).listen((List<Map<String, dynamic>> newDataList) {
+      setState(() {
+        dataList = newDataList; // Update the dataList when new data arrives
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    String pilih_warna = warna.first;
+    // String pilih_warna = warna.first;
     return Scaffold(
       body: Center(
         child: Container(
@@ -73,8 +100,8 @@ class _DetailNewsState extends State<DetailNews> {
                         border: Border(
                             left: BorderSide(color: Colors.blue, width: 10))),
                     child: ListTile(
-                      title: Text(dataList[index]["Nama"]),
-                      subtitle: Text(dataList[index]["Kelas1"]),
+                      title: Text(dataList[index]["Judul"]),
+                      subtitle: Text(dataList[index]["Source"]),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -95,7 +122,7 @@ class _DetailNewsState extends State<DetailNews> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NextPage()),
+            MaterialPageRoute(builder: (context) => TambahKonsultasi()),
           );
         },
         child: Icon(Icons.add),
@@ -126,7 +153,7 @@ class DetailScreen extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Text(
-                    " ${dataList["Nama"]}",
+                    " ${dataList["Judul"]}",
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: 22,
@@ -136,7 +163,7 @@ class DetailScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(" ${dataList["kelas2"]}"),
+                      Text(" ${dataList["Isi"]}"),
                     ],
                   ),
                 ],
@@ -149,52 +176,74 @@ class DetailScreen extends StatelessWidget {
   }
 }
 
-class NextPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Card Example',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(),
-    );
-  }
-}
+// class TambahKonsultasi extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Card Example',
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: MyHomePage(),
+//     );
+//   }
+// }
 
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: MyCard(),
-      ),
-    );
-  }
-}
+// class MyHomePage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(
+//         child: MyCard(),
+//       ),
+//     );
+//   }
+// }
 
-class MyCard extends StatefulWidget {
-  @override
-  _MyCardState createState() => _MyCardState();
-}
+// class MyCard extends StatefulWidget {
+//   @override
+//   _MyCardState createState() => _MyCardState();
+// }
 
-class _MyCardState extends State<MyCard> {
+class TambahKonsultasi extends StatelessWidget {
   TextEditingController _textEditingController = TextEditingController();
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
   TextEditingController _sourceController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
 
-  @override
-  void dispose() {
-    _textEditingController.dispose();
-    _titleController.dispose();
-    _contentController.dispose();
-    _sourceController.dispose();
-    _dateController.dispose();
-    super.dispose();
+  void createDocument() async {
+    String title = _titleController.text;
+    String content = _contentController.text;
+    String source = _sourceController.text;
+    String date = _dateController.text;
+
+    try {
+      await FirebaseFirestore.instance.collection('informasi').add({
+        'judul': title,
+        'isi': content,
+        'source': source,
+        'tgl_pembuatan': date,
+      });
+
+      // Document created successfully
+      print('Document created successfully');
+    } catch (e) {
+      // Error occurred while creating document
+      print('Error creating document: $e');
+    }
   }
+
+  // @override
+  // void dispose() {
+  //   _textEditingController.dispose();
+  //   _titleController.dispose();
+  //   _contentController.dispose();
+  //   _sourceController.dispose();
+  //   _dateController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -207,11 +256,11 @@ class _MyCardState extends State<MyCard> {
             color: Colors.white,
           ),
           onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Admin()),
-          );
-        },
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Admin()),
+            );
+          },
         ),
       ),
       body: Padding(
@@ -254,17 +303,15 @@ class _MyCardState extends State<MyCard> {
                 SizedBox(height: 8.0),
                 ElevatedButton(
                   onPressed: () {
-                    // Aksi yang dilakukan ketika tombol "Submit" ditekan
-                    String title = _titleController.text;
-                    String content = _contentController.text;
-                    String source = _sourceController.text;
-                    String date = _dateController.text;
-
-                    // Lakukan apa yang Anda inginkan dengan data yang diambil dari form
-                    print('Judul: $title');
-                    print('Isi: $content');
-                    print('Sumber: $source');
-                    print('Tanggal: $date');
+                    createDocument();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Admin()),
+                    );
+                    const snackBar = SnackBar(
+                      content: Text('Informasi telah berhasil ditambahkan!'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(

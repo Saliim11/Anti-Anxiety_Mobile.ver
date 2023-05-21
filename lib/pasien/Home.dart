@@ -69,7 +69,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void checkConnectID() async {
-    final currentUserUid = user?.uid; // Assuming 'user' is the current user object
+    final currentUserUid =
+        user?.uid; // Assuming 'user' is the current user object
 
     if (currentUserUid != null) {
       final currentUserSnapshot = await FirebaseFirestore.instance
@@ -84,7 +85,8 @@ class _HomePageState extends State<HomePage> {
           final connectUserRef =
               FirebaseFirestore.instance.collection('users').doc(connectID);
 
-          connectUserSubscription = connectUserRef.snapshots().listen((snapshot) {
+          connectUserSubscription =
+              connectUserRef.snapshots().listen((snapshot) {
             if (snapshot.exists) {
               setState(() {
                 selectedDoctor = snapshot['nama'];
@@ -119,7 +121,8 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => DetailDokter()),
+                          MaterialPageRoute(
+                              builder: (context) => DetailDokter()),
                         );
                       },
                     ),
@@ -151,7 +154,39 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
+              SizedBox(height: 10.0),
+              Visibility(
+                visible: selectedDoctor.isEmpty,
+                child: CardButton(
+                  title: 'Consult Now\nPsikolog',
+                  imagePath: 'assets/psikolog.png',
+                  onTap: () async {
+                    await updateConnectId('Dokter');
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        content: Text(
+                            'Anda telah tersambung dengan dokter $selectedDoctor'),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
               SizedBox(height: 16),
+              Text(
+                'BERITA', // Text berita
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+
               CarouselSlider(
                 items: _beritaList.map((berita) {
                   return GestureDetector(
@@ -198,17 +233,22 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              Text(
-                'BERITA', // Text berita
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
               SizedBox(height: 6),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Indicators for berita carousel
-                ],
+                children: _beritaList.map((berita) {
+                  int index = _beritaList.indexOf(berita);
+                  return Container(
+                    width: 10,
+                    height: 10,
+                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          _current == index ? Colors.blueAccent : Colors.grey,
+                    ),
+                  );
+                }).toList(),
               ),
               InkWell(
                 onTap: () {
