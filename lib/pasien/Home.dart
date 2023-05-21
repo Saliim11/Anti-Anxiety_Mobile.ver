@@ -6,9 +6,45 @@ import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'Detaildokter.dart';
 import 'Detailberita.dart';
 import 'dart:async';
+import 'package:carousel_slider/carousel_slider.dart';
 
 final User? user = Auth().currentUser;
 String selectedDoctor = '';
+
+List<Map<String, dynamic>> _beritaList = [
+  {
+    'judul': 'Berita 1',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+  {
+    'judul': 'Berita 2',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+  {
+    'judul': 'Berita 3',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+  {
+    'judul': 'Berita 4',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+  {
+    'judul': 'Berita 5',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+];
+
+int _current = 0;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -33,7 +69,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void checkConnectID() async {
-    final currentUserUid = user?.uid; // Assuming 'user' is the current user object
+    final currentUserUid =
+        user?.uid; // Assuming 'user' is the current user object
 
     if (currentUserUid != null) {
       final currentUserSnapshot = await FirebaseFirestore.instance
@@ -48,7 +85,8 @@ class _HomePageState extends State<HomePage> {
           final connectUserRef =
               FirebaseFirestore.instance.collection('users').doc(connectID);
 
-          connectUserSubscription = connectUserRef.snapshots().listen((snapshot) {
+          connectUserSubscription =
+              connectUserRef.snapshots().listen((snapshot) {
             if (snapshot.exists) {
               setState(() {
                 selectedDoctor = snapshot['nama'];
@@ -83,7 +121,8 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => DetailDokter()),
+                          MaterialPageRoute(
+                              builder: (context) => DetailDokter()),
                         );
                       },
                     ),
@@ -115,19 +154,101 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-
+              SizedBox(height: 10.0),
+              Visibility(
+                visible: selectedDoctor.isEmpty,
+                child: CardButton(
+                  title: 'Consult Now\nPsikolog',
+                  imagePath: 'assets/psikolog.png',
+                  onTap: () async {
+                    await updateConnectId('Dokter');
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        content: Text(
+                            'Anda telah tersambung dengan dokter $selectedDoctor'),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
               SizedBox(height: 16),
               Text(
                 'BERITA', // Text berita
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
+
+              CarouselSlider(
+                items: _beritaList.map((berita) {
+                  return GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(berita['judul']),
+                            content: Text(berita['konten']),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Tutup'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(5),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          berita['gambar'],
+                          fit: BoxFit.cover,
+                          width: 500,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+                options: CarouselOptions(
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  aspectRatio: 2.0,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  },
+                ),
+              ),
               SizedBox(height: 6),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Indicators for berita carousel
-                ],
+                children: _beritaList.map((berita) {
+                  int index = _beritaList.indexOf(berita);
+                  return Container(
+                    width: 10,
+                    height: 10,
+                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          _current == index ? Colors.blueAccent : Colors.grey,
+                    ),
+                  );
+                }).toList(),
               ),
               InkWell(
                 onTap: () {

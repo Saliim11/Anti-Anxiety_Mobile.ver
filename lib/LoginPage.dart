@@ -1,5 +1,5 @@
 import 'package:anti_anxiety/RegisterPage.dart';
-import 'package:anti_anxiety/dokter/Home_dokter.dart';
+import 'package:anti_anxiety/admin/admin.dart';
 import 'package:anti_anxiety/pasien/Pasien.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
 
       // Get the user's role from the document
       final role = userDoc['role'];
+      print(role);
 
       // Navigate to the appropriate screen based on the user's role
       if (role == 'Pasien') {
@@ -76,6 +77,13 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => Dokter()),
+          );
+        }
+      } else {
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Admin()),
           );
         }
       }
