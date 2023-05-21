@@ -6,9 +6,45 @@ import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'Detaildokter.dart';
 import 'Detailberita.dart';
 import 'dart:async';
+import 'package:carousel_slider/carousel_slider.dart';
 
 final User? user = Auth().currentUser;
 String selectedDoctor = '';
+
+List<Map<String, dynamic>> _beritaList = [
+  {
+    'judul': 'Berita 1',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+  {
+    'judul': 'Berita 2',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+  {
+    'judul': 'Berita 3',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+  {
+    'judul': 'Berita 4',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+  {
+    'judul': 'Berita 5',
+    'gambar': 'https://picsum.photos/id/102/400/200',
+    'konten':
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+];
+
+int _current = 0;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -115,8 +151,53 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-
               SizedBox(height: 16),
+              CarouselSlider(
+                items: _beritaList.map((berita) {
+                  return GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(berita['judul']),
+                            content: Text(berita['konten']),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Tutup'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(5),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          berita['gambar'],
+                          fit: BoxFit.cover,
+                          width: 500,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+                options: CarouselOptions(
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  aspectRatio: 2.0,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _current = index;
+                    });
+                  },
+                ),
+              ),
               Text(
                 'BERITA', // Text berita
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
