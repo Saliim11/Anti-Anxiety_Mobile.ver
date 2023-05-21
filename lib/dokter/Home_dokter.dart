@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'CatatanKonsulPasien.dart';
+
 final User? user = Auth().currentUser;
 String namaPasien = "";
+
 class HomePageDokter extends StatefulWidget {
   const HomePageDokter({Key? key}) : super(key: key);
 
@@ -22,35 +25,34 @@ class _HomePageDokterState extends State<HomePageDokter> {
   }
 
   Future<void> fetchUserData() async {
-  try {
-    final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user?.uid)
-        .get();
-
-    final connectId = userSnapshot.get('connect_id');
-    print("Ini connectID : $connectId");
-
-    if (connectId != '') {
-      final DocumentSnapshot pasienSnapshot = await FirebaseFirestore.instance
+    try {
+      final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(connectId)
+          .doc(user?.uid)
           .get();
-      namaPasien = pasienSnapshot.get('nama');
-    }
 
-    if (connectId == '') {
-      namaPasien = "";
-    }
+      final connectId = userSnapshot.get('connect_id');
+      print("Ini connectID : $connectId");
 
-    setState(() {
-      isButtonEnabled = connectId != '';
-    });
-  } catch (e) {
-    print('Error fetching user data: $e');
+      if (connectId != '') {
+        final DocumentSnapshot pasienSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(connectId)
+            .get();
+        namaPasien = pasienSnapshot.get('nama');
+      }
+
+      if (connectId == '') {
+        namaPasien = "";
+      }
+
+      setState(() {
+        isButtonEnabled = connectId != '';
+      });
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +84,8 @@ class _HomePageDokterState extends State<HomePageDokter> {
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        primary: isButtonEnabled ? Color(0xFF01365A) : Colors.grey,
+                        primary:
+                            isButtonEnabled ? Color(0xFF01365A) : Colors.grey,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -104,11 +107,16 @@ class _HomePageDokterState extends State<HomePageDokter> {
                     child: ElevatedButton(
                       onPressed: isButtonEnabled
                           ? () {
-                              // untuk trigger
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CatatanKonsulPasien()));
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        primary: isButtonEnabled ? Color(0xFF01365A) : Colors.grey,
+                        primary:
+                            isButtonEnabled ? Color(0xFF01365A) : Colors.grey,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
