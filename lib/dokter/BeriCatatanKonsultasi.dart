@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 
 class BeriCatatan extends StatefulWidget {
   const BeriCatatan({super.key});
@@ -10,7 +13,46 @@ class BeriCatatan extends StatefulWidget {
   State<BeriCatatan> createState() => _BeriCatatanState();
 }
 
+final User? user = Auth().currentUser;
+String namaPasien = "";
+
 class _BeriCatatanState extends State<BeriCatatan> {
+
+  Future<void> fetchNamaPasien() async {
+    try {
+      final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user?.uid)
+          .get();
+
+      final connectId = userSnapshot.get('connect_id');
+      print("Ini connectID : $connectId");
+
+      if (connectId != '') {
+        final DocumentSnapshot pasienSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(connectId)
+            .get();
+        namaPasien = pasienSnapshot.get('nama');
+      }
+
+      // if (connectId == '') {
+      //   namaPasien = "";
+      // }
+
+      // setState(() {
+      //   isButtonEnabled = connectId != '';
+      // });
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
+
+  void initState() {
+    super.initState();
+    fetchNamaPasien();
+  }
+
   late Map<String, dynamic> detailList = {
     "nama": "Dr Marisa",
     "posisi": "PSIKOLOG",
@@ -47,7 +89,7 @@ class _BeriCatatanState extends State<BeriCatatan> {
                 Row(
                   children: [
                     Text(
-                      "To : Yanto",
+                      "To : $namaPasien",
                       style: const TextStyle(
                           fontSize: 17, fontWeight: FontWeight.bold),
                     ),
