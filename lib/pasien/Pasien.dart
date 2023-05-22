@@ -27,7 +27,7 @@ class _PasienState extends State<Pasien> {
         .where('email', isEqualTo: _userEmail)
         .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
+    if (mounted && querySnapshot.docs.isNotEmpty) {
       DocumentSnapshot snapshot = querySnapshot.docs.first;
       Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
       if (data != null) {
