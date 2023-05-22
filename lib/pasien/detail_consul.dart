@@ -42,7 +42,7 @@ class detailKonsul extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  detailList["posisi"],
+                  "Psikolog",
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
