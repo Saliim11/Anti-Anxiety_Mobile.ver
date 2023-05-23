@@ -20,45 +20,81 @@ class _HomePageDokterState extends State<HomePageDokter> {
   bool isButtonEnabled = false;
   String _connectID = '';
   @override
-void initState() {
-  super.initState();
-  fetchUserData((connectID) {
-    _connectID = connectID;
-  });
-}
-
-  Future<void> fetchUserData(void Function(String connectID) onConnectIDReceived) async {
-  try {
-    final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user?.uid)
-        .get();
-
-    final connectId = userSnapshot.get('connect_id');
-    print("Ini connectID : $connectId");
-
-    if (connectId != '') {
-      final DocumentSnapshot pasienSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(connectId)
-          .get();
-      namaPasien = pasienSnapshot.get('nama');
-    }
-
-    if (connectId == '') {
-      namaPasien = "";
-    }
-
-    setState(() {
-      isButtonEnabled = connectId != '';
+  void initState() {
+    super.initState();
+    fetchUserData((connectID) {
+      _connectID = connectID;
     });
-
-    onConnectIDReceived(connectId); // Pass the connectID to the callback function
-  } catch (e) {
-    print('Error fetching user data: $e');
   }
-}
 
+  Future<void> fetchUserData(
+      void Function(String connectID) onConnectIDReceived) async {
+    try {
+      final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user?.uid)
+          .get();
+
+      final connectId = userSnapshot.get('connect_id');
+      print("Ini connectID : $connectId");
+
+      if (connectId != '') {
+        final DocumentSnapshot pasienSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(connectId)
+            .get();
+        namaPasien = pasienSnapshot.get('nama');
+      }
+
+      if (connectId == '') {
+        namaPasien = "";
+      }
+
+      setState(() {
+        isButtonEnabled = connectId != '';
+      });
+
+      onConnectIDReceived(
+          connectId); // Pass the connectID to the callback function
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
+
+  void deleteConnectID() async {
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(user!.uid);
+
+      // Fetch docA
+      final userDocSnapshot = await userDocRef.get();
+      final connectID = userDocSnapshot.get('connect_id');
+
+      // Search for docB
+      if (connectID != '') {
+        final pasienDocRef =
+            FirebaseFirestore.instance.collection('users').doc(connectID);
+        final pasienDocSnapshot = await pasienDocRef.get();
+
+        // Update "connect_id" field in docA to empty
+      await userDocRef.update({'connect_id': ''});
+
+      // Update "connect_id" field in docB to empty
+      await pasienDocRef.update({'connect_id': ''});
+
+      setState(() {
+        isButtonEnabled = false;
+      });
+      }
+
+      const snackBar = SnackBar(
+        content: Text('Berhasil menyelesaikan konsultasi!'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } catch (e) {
+      print('Error deleting connect ID: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +122,10 @@ void initState() {
                     child: ElevatedButton(
                       onPressed: isButtonEnabled
                           ? () {
-                              Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ChatScreen(userUid: Auth().currentUser!.uid, otherUserUid: _connectID)));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ChatScreen(
+                                      userUid: Auth().currentUser!.uid,
+                                      otherUserUid: _connectID)));
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
@@ -145,11 +183,7 @@ void initState() {
                 width: MediaQuery.of(context).size.width / 2 - 20,
                 height: 54,
                 child: ElevatedButton(
-                  onPressed: isButtonEnabled
-                      ? () {
-                          // untuk trigger
-                        }
-                      : null,
+                  onPressed: isButtonEnabled ? deleteConnectID : null,
                   style: ElevatedButton.styleFrom(
                     primary: isButtonEnabled ? Color(0xFF01365A) : Colors.grey,
                     shape: RoundedRectangleBorder(
