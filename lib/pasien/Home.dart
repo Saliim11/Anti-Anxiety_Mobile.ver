@@ -11,38 +11,38 @@ import 'package:carousel_slider/carousel_slider.dart';
 final User? user = Auth().currentUser;
 String selectedDoctor = '';
 
-List<Map<String, dynamic>> _beritaList = [
-  {
-    'judul': 'Berita 1',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-  {
-    'judul': 'Berita 2',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-  {
-    'judul': 'Berita 3',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-  {
-    'judul': 'Berita 4',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-  {
-    'judul': 'Berita 5',
-    'gambar': 'https://picsum.photos/id/102/400/200',
-    'konten':
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-  },
-];
+// List<Map<String, dynamic>> _beritaList = [
+//   {
+//     'judul': 'Berita 1',
+//     'gambar': 'https://picsum.photos/id/102/400/200',
+//     'konten':
+//         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+//   },
+//   {
+//     'judul': 'Berita 2',
+//     'gambar': 'https://picsum.photos/id/102/400/200',
+//     'konten':
+//         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+//   },
+//   {
+//     'judul': 'Berita 3',
+//     'gambar': 'https://picsum.photos/id/102/400/200',
+//     'konten':
+//         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+//   },
+//   {
+//     'judul': 'Berita 4',
+//     'gambar': 'https://picsum.photos/id/102/400/200',
+//     'konten':
+//         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+//   },
+//   {
+//     'judul': 'Berita 5',
+//     'gambar': 'https://picsum.photos/id/102/400/200',
+//     'konten':
+//         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+//   },
+// ];
 
 int _current = 0;
 
@@ -56,10 +56,28 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   StreamSubscription<DocumentSnapshot>? connectUserSubscription;
 
+  List<Map<String, dynamic>> _beritaList = [];
+
+  void getBeritaList() async {
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('informasi').get();
+
+    setState(() {
+      _beritaList = querySnapshot.docs.map((doc) {
+        return {
+          'judul': doc['judul'],
+          'gambar': doc['gambar'],
+          'konten': doc['isi'],
+        };
+      }).toList();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     checkConnectID();
+    getBeritaList();
   }
 
   @override
@@ -186,7 +204,6 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-
               CarouselSlider(
                 items: _beritaList.map((berita) {
                   return GestureDetector(
@@ -217,6 +234,7 @@ class _HomePageState extends State<HomePage> {
                           berita['gambar'],
                           fit: BoxFit.cover,
                           width: 500,
+                          height: 200,
                         ),
                       ),
                     ),
