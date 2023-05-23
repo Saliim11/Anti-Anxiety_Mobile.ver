@@ -5,6 +5,7 @@ import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
+import 'package:intl/intl.dart';
 
 class HomePageAdmin extends StatefulWidget {
   const HomePageAdmin({Key? key}) : super(key: key); // Add 'const' here
@@ -211,20 +212,20 @@ class TambahKonsultasi extends StatelessWidget {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
   TextEditingController _sourceController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
+  TextEditingController _photoController = TextEditingController();
 
   void createDocument() async {
     String title = _titleController.text;
     String content = _contentController.text;
     String source = _sourceController.text;
-    String date = _dateController.text;
 
     try {
       await FirebaseFirestore.instance.collection('informasi').add({
         'judul': title,
         'isi': content,
         'source': source,
-        'tgl_pembuatan': date,
+        'tgl_pembuatan': DateFormat('dd MMMM yyyy').format(DateTime.now()),
+        'gambar': _photoController.text,
       });
 
       // Document created successfully
@@ -295,9 +296,9 @@ class TambahKonsultasi extends StatelessWidget {
                 ),
                 SizedBox(height: 8.0),
                 TextField(
-                  controller: _dateController,
+                  controller: _photoController,
                   decoration: InputDecoration(
-                    labelText: 'Tanggal',
+                    labelText: 'Link foto',
                   ),
                 ),
                 SizedBox(height: 8.0),
