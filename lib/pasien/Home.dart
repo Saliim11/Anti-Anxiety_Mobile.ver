@@ -315,13 +315,11 @@ class _HomePageState extends State<HomePage> {
     final currentUserUid =
         user?.uid; // Assuming 'user' is the current user object
     selectedDoctor = selectedUser['nama'];
-
     // Fetch the document for the current user
     final currentUserSnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUserUid)
         .get();
-
     if (currentUserSnapshot.exists) {
       // Update the 'connect_id' field for the current user
       await FirebaseFirestore.instance
@@ -329,7 +327,6 @@ class _HomePageState extends State<HomePage> {
           .doc(currentUserUid)
           .update({'connect_id': selectedUserId});
     }
-
     // Update the 'connect_id' field for the selected user
     await FirebaseFirestore.instance
         .collection('users')
