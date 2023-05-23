@@ -2,6 +2,7 @@ import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../chat/text_composer.dart';
 
 import 'CatatanKonsulPasien.dart';
 
@@ -23,7 +24,6 @@ class _HomePageDokterState extends State<HomePageDokter> {
     super.initState();
     fetchUserData();
   }
-
   Future<void> fetchUserData() async {
     try {
       final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
@@ -80,7 +80,8 @@ class _HomePageDokterState extends State<HomePageDokter> {
                     child: ElevatedButton(
                       onPressed: isButtonEnabled
                           ? () {
-                              // untuk trigger
+                              Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ChatScreen()));
                             }
                           : null,
                       style: ElevatedButton.styleFrom(

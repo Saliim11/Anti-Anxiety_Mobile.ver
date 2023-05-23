@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-
+import '../chat/text_composer.dart';
 import '../chat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../Firebase/login_register_auth/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DetailDokter extends StatefulWidget {
   const DetailDokter({Key? key}) : super(key: key);
@@ -9,7 +12,43 @@ class DetailDokter extends StatefulWidget {
   _DetailDokterState createState() => _DetailDokterState();
 }
 
+String selectedDoctor = "";
+
+void checkConnectID() async {
+  final currentUserUid = Auth().currentUser?.uid;
+
+  if (currentUserUid != null) {
+    final currentUserSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserUid)
+        .get();
+
+    if (currentUserSnapshot.exists) {
+      final connectID = currentUserSnapshot['connect_id'];
+
+      if (connectID.isNotEmpty) {
+        final connectUserRef =
+            FirebaseFirestore.instance.collection('users').doc(connectID);
+
+        connectUserRef.get().then((connectUserSnapshot) {
+          if (connectUserSnapshot.exists) {
+            final selectedDoctor = connectUserSnapshot['nama'];
+            // Use the selectedDoctor variable as needed
+          }
+        });
+      } else {
+        selectedDoctor = '';
+      }
+    }
+  }
+}
+
 class _DetailDokterState extends State<DetailDokter> {
+  void initState() {
+    super.initState();
+    checkConnectID();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +63,7 @@ class _DetailDokterState extends State<DetailDokter> {
             Navigator.pop(context);
           },
         ),
-        title: Text('Detail Informasi'),
+        title: Text('Detail Dokter'),
       ),
       body: Center(
         child: Column(
@@ -38,7 +77,7 @@ class _DetailDokterState extends State<DetailDokter> {
             ),
             SizedBox(height: 16),
             Text(
-              'Nama Dokter',
+              selectedDoctor,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -55,8 +94,10 @@ class _DetailDokterState extends State<DetailDokter> {
             SizedBox(height: 32),
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => ChatPage()));
+                // Navigator.of(context)
+                //     .push(MaterialPageRoute(builder: (context) => ChatPage()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ChatScreen()));
               },
               icon: Icon(Icons.chat),
               label: Text('Chat Dokter'),
