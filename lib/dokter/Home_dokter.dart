@@ -2,7 +2,7 @@ import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../chat/text_composer.dart';
+import '../chat/private_chat.dart';
 
 import 'CatatanKonsulPasien.dart';
 
@@ -18,41 +18,47 @@ class HomePageDokter extends StatefulWidget {
 
 class _HomePageDokterState extends State<HomePageDokter> {
   bool isButtonEnabled = false;
-
+  String _connectID = '';
   @override
-  void initState() {
-    super.initState();
-    fetchUserData();
-  }
-  Future<void> fetchUserData() async {
-    try {
-      final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+void initState() {
+  super.initState();
+  fetchUserData((connectID) {
+    _connectID = connectID;
+  });
+}
+
+  Future<void> fetchUserData(void Function(String connectID) onConnectIDReceived) async {
+  try {
+    final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+
+    final connectId = userSnapshot.get('connect_id');
+    print("Ini connectID : $connectId");
+
+    if (connectId != '') {
+      final DocumentSnapshot pasienSnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(user?.uid)
+          .doc(connectId)
           .get();
-
-      final connectId = userSnapshot.get('connect_id');
-      print("Ini connectID : $connectId");
-
-      if (connectId != '') {
-        final DocumentSnapshot pasienSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(connectId)
-            .get();
-        namaPasien = pasienSnapshot.get('nama');
-      }
-
-      if (connectId == '') {
-        namaPasien = "";
-      }
-
-      setState(() {
-        isButtonEnabled = connectId != '';
-      });
-    } catch (e) {
-      print('Error fetching user data: $e');
+      namaPasien = pasienSnapshot.get('nama');
     }
+
+    if (connectId == '') {
+      namaPasien = "";
+    }
+
+    setState(() {
+      isButtonEnabled = connectId != '';
+    });
+
+    onConnectIDReceived(connectId); // Pass the connectID to the callback function
+  } catch (e) {
+    print('Error fetching user data: $e');
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +87,7 @@ class _HomePageDokterState extends State<HomePageDokter> {
                       onPressed: isButtonEnabled
                           ? () {
                               Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ChatScreen()));
+                    MaterialPageRoute(builder: (context) => ChatScreen(userUid: Auth().currentUser!.uid, otherUserUid: _connectID)));
                             }
                           : null,
                       style: ElevatedButton.styleFrom(

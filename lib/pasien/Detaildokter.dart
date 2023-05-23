@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import '../chat/text_composer.dart';
-import '../chat.dart';
+import '../chat/private_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Firebase/login_register_auth/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class DetailDokter extends StatefulWidget {
   const DetailDokter({Key? key}) : super(key: key);
@@ -13,8 +11,7 @@ class DetailDokter extends StatefulWidget {
 }
 
 String selectedDoctor = "";
-
-void checkConnectID() async {
+void checkConnectID(void Function(String connectID) onConnectIDReceived) async {
   final currentUserUid = Auth().currentUser?.uid;
 
   if (currentUserUid != null) {
@@ -33,20 +30,28 @@ void checkConnectID() async {
         connectUserRef.get().then((connectUserSnapshot) {
           if (connectUserSnapshot.exists) {
             final selectedDoctor = connectUserSnapshot['nama'];
-            // Use the selectedDoctor variable as needed
+            onConnectIDReceived(connectID); // Pass the connectID to the callback function
           }
         });
       } else {
-        selectedDoctor = '';
+        onConnectIDReceived(''); // Pass an empty string if connectID is empty
       }
     }
   }
 }
 
+
 class _DetailDokterState extends State<DetailDokter> {
+  String _connectID = '';
+
+  @override
   void initState() {
     super.initState();
-    checkConnectID();
+    checkConnectID((connectID) {
+      setState(() {
+        _connectID = connectID;
+      });
+    });
   }
 
   @override
@@ -97,7 +102,7 @@ class _DetailDokterState extends State<DetailDokter> {
                 // Navigator.of(context)
                 //     .push(MaterialPageRoute(builder: (context) => ChatPage()));
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ChatScreen()));
+                    MaterialPageRoute(builder: (context) => ChatScreen(userUid: Auth().currentUser!.uid, otherUserUid: _connectID)));
               },
               icon: Icon(Icons.chat),
               label: Text('Chat Dokter'),

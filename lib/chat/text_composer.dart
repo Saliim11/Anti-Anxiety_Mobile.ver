@@ -170,7 +170,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     var data = <String, dynamic>{
-      'uid': user.uid,
+      'sender_uid': user.uid,
       'senderName': _usernameFromFirestore,
       'time': Timestamp.now(),
       'text': text,
