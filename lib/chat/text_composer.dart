@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 
 class TextComposer extends StatefulWidget {
   const TextComposer({
@@ -71,8 +72,38 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
+String _usernameFromFirestore = '';
+String _userEmail = '';
+
 class _ChatScreenState extends State<ChatScreen> {
   final firestoreCollection = FirebaseFirestore.instance.collection('messages');
+
+  @override
+  void initState() {
+    super.initState();
+    _getUsernameFromFirestore();
+  }
+
+  void _getUsernameFromFirestore() async {
+    setState(() {
+      _userEmail = Auth().currentUser?.email ?? '';
+    });
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: _userEmail)
+        .get();
+
+    if (mounted && querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot snapshot = querySnapshot.docs.first;
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      if (data != null) {
+        setState(() {
+          _usernameFromFirestore = data['nama'] ?? '';
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,8 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     var data = <String, dynamic>{
       'uid': user.uid,
-      'senderName': user.displayName,
-      'senderPhotoUrl': user.photoURL,
+      'senderName': _usernameFromFirestore,
       'time': Timestamp.now(),
       'text': text,
     };
@@ -208,23 +238,4 @@ class ChatMessage extends StatelessWidget {
       ),
     );
   }
-}
-
-class ChatApp extends StatelessWidget {
-  const ChatApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Chat App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ChatScreen(),
-    );
-  }
-}
-
-void main() {
-  runApp(const ChatApp());
 }
