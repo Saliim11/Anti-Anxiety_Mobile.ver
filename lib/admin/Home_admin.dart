@@ -99,7 +99,8 @@ class _DetailNewsState extends State<DetailNews> {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                         border: Border(
-                            left: BorderSide(color: Colors.blue, width: 10))),
+                            left: BorderSide(
+                                color: Color(0xFF01365A), width: 10))),
                     child: ListTile(
                       title: Text(dataList[index]["Judul"]),
                       subtitle: Text(dataList[index]["Source"]),
@@ -142,36 +143,57 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          height: 500,
-          width: 350,
-          child: Card(
-            elevation: 10,
-            margin: EdgeInsets.all(16),
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    " ${dataList["Judul"]}",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 22,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(" ${dataList["Isi"]}"),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 150,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, 'Cancel');
+                  },
+                  child: Icon(
+                    Icons.arrow_back_sharp,
+                    color: Colors.black,
+                  )),
+            ],
+          ),
+          Center(
+            child: Container(
+              height: 500,
+              width: 350,
+              child: Card(
+                elevation: 10,
+                margin: EdgeInsets.all(16),
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        " ${dataList["Judul"]}",
+                        style: TextStyle(
+                          color: Color(0xFF01365A),
+                          fontSize: 22,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(" ${dataList["Isi"]}"),
+                        ],
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
