@@ -34,6 +34,7 @@ void checkConnectID(void Function(String connectID) onConnectIDReceived) async {
           }
         });
       } else {
+        print("Connect ID is empty");
         onConnectIDReceived(''); // Pass an empty string if connectID is empty
       }
     }

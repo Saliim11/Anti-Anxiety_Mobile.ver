@@ -13,6 +13,7 @@ dependencies:
   firebase_core: ^2.10.0
   flutter:
     sdk: flutter
+  flutter_phone_direct_caller: ^2.1.1
 
 dev_dependencies:
   flutter_test:
