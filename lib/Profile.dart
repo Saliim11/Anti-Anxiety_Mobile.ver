@@ -138,7 +138,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    // backgroundImage: AssetImage('/assets/psikiater.png'),
+                    backgroundImage: NetworkImage(
+                      'https://picsum.photos/200',
+                    ),
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -177,9 +179,34 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 10),
             ElevatedButton.icon(
-              onPressed: () {
-                signOut();
-              },
+              onPressed: () => showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Confirm Logout'),
+                  content: const Text('Are you sure you want to logout?'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text(
+                        'No',
+                        style: TextStyle(color: Color(0xFF01365A)),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        signOut();
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Color(0xFF01365A))),
+                      child: const Text(
+                        'Yes',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               icon: Icon(Icons.logout),
               label: Text('Log Out'),
               style: ElevatedButton.styleFrom(
@@ -197,4 +224,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
