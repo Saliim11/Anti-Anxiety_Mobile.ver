@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
             MaterialPageRoute(builder: (context) => Pasien()),
           );
         }
-      } else if (role == 'Dokter') {
+      } else if (role == 'Psikolog' || role == 'Psikiater') {
         if (mounted) {
           Navigator.pushReplacement(
             context,
