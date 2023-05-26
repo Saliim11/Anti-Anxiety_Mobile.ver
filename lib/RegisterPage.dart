@@ -491,7 +491,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         // ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             Text(
                               "Already have an account?",
                               style: TextStyle(
@@ -524,7 +524,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-enum RoleUsers { Pasien, Dokter }
+enum RoleUsers { Pasien, Psikolog, Psikiater }
 
 class RadioUsers extends StatefulWidget {
   final ValueChanged<String> onValueChanged;
@@ -558,9 +558,17 @@ class _RadioUsersState extends State<RadioUsers> {
           ),
         ),
         ListTile(
-          title: const Text('Dokter'),
+          title: const Text('Psikolog'),
           leading: Radio<RoleUsers>(
-            value: RoleUsers.Dokter,
+            value: RoleUsers.Psikolog,
+            groupValue: _character,
+            onChanged: _handleRadioValueChanged,
+          ),
+        ),
+        ListTile(
+          title: const Text('Psikiater'),
+          leading: Radio<RoleUsers>(
+            value: RoleUsers.Psikiater,
             groupValue: _character,
             onChanged: _handleRadioValueChanged,
           ),
