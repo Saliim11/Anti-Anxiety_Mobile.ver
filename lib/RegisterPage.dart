@@ -536,7 +536,7 @@ class RadioUsers extends StatefulWidget {
 }
 
 class _RadioUsersState extends State<RadioUsers> {
-  RoleUsers? _character = RoleUsers.Pasien;
+  RoleUsers? _character;
 
   void _handleRadioValueChanged(RoleUsers? value) {
     setState(() {
