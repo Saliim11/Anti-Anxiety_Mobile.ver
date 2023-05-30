@@ -1,7 +1,7 @@
 name: anti_anxiety
 description: A new Flutter project.
 publish_to: "none"
-version: 0.2.1
+version: 1.4.0
 
 environment:
   sdk: ">=2.19.2 <3.0.0"

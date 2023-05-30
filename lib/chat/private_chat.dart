@@ -96,27 +96,30 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<String> _getContactFromFirestore() async {
-    setState(() {
-      _userEmail = FirebaseAuth.instance.currentUser?.email ?? '';
-    });
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return '';
+    }
 
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+    DocumentSnapshot docCaller = await FirebaseFirestore.instance
         .collection('users')
-        .where('email', isEqualTo: _userEmail)
+        .doc(user.uid)
         .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      DocumentSnapshot snapshot = querySnapshot.docs.first;
-      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
-      if (data != null) {
-        String contact = data['kontak'] ?? '';
-        // setState(() {
-        //   _kontakFromFirestore = contact;
-        // });
-        return contact;
-      }
+    String connectId = docCaller['connect_id'];
+
+    if (connectId == null || connectId.isEmpty) {
+      return '';
     }
-    return '';
+
+    DocumentSnapshot docReceiver = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(connectId)
+        .get();
+
+    String kontak = docReceiver['kontak'];
+
+    return kontak ?? '';
   }
 
   void _getUsernameFromFirestore() async {
