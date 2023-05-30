@@ -9,6 +9,7 @@ environment:
 dependencies:
   carousel_slider: ^4.2.1
   cloud_firestore: ^4.5.2
+  crypto: ^3.0.3
   firebase_auth: ^4.4.2
   firebase_core: ^2.10.0
   flutter:
@@ -24,4 +25,6 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/strees.png
+    - assets/melotot.jpg
     - assets/
