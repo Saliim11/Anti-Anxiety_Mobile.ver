@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
-
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
@@ -29,6 +28,24 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String _selectedRole = RoleUsers.Pasien.toString().split('.').last;
 
+  DateTime? _selectedDate;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        _selectedDate = pickedDate;
+        _controllerTglLahir.text = pickedDate.toString().split(' ')[0];
+      });
+    }
+  }
+
   Future<void> createUserWithEmailAndPassword() async {
     try {
       UserCredential userCredential =
@@ -37,8 +54,8 @@ class _RegisterPageState extends State<RegisterPage> {
         password: _controllerPassword.text,
       );
 
-      String encryptedPassword = md5.convert(utf8.encode(_controllerPassword.text)).toString();
-      
+      String encryptedPassword =
+          md5.convert(utf8.encode(_controllerPassword.text)).toString();
 
       // Create a new document in the "users" collection with the user's email, password, and role
       await FirebaseFirestore.instance
@@ -106,12 +123,25 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 // date picker
-                TextField(
-                  controller: _controllerTglLahir,
-                  decoration: const InputDecoration(
-                    labelText: 'Tgl Lahir *yyyy-MM-dd',
+                InkWell(
+                  onTap: () {
+                    _selectDate(context);
+                  },
+                  child: IgnorePointer(
+                    child: TextField(
+                      controller: _controllerTglLahir,
+                      decoration: const InputDecoration(
+                        labelText: 'Tgl Lahir *yyyy-MM-dd',
+                      ),
+                    ),
                   ),
                 ),
+                // TextField(
+                //   controller: _controllerTglLahir,
+                //   decoration: const InputDecoration(
+                //     labelText: 'Tgl Lahir *yyyy-MM-dd',
+                //   ),
+                // ),
                 // input email
                 TextField(
                   controller: _controllerEmail,
