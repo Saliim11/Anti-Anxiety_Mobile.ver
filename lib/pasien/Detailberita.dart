@@ -11,14 +11,16 @@ List<Map<String, dynamic>> dataList = [
   {
     "Nama": "tanda-tanda enxiety",
     "Kelas1": "Lorem Ipsum",
-    "gambar":"../assets/strees.png",
+    // "gambar":"../../assets/strees.png",
+    "gambar": "assets/strees.png",
     "kelas2":
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
   },
   {
     "Nama": "gejala anxiety",
     "Kelas1": "Lorem Ipsum",
-    "gambar":"../assets/melotot.jpg",
+    // "gambar":"../../assets/melotot.jpg",
+    "gambar": "assets/strees.png",
     "kelas2":
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
   },
@@ -105,8 +107,8 @@ class DetailScreen extends StatelessWidget {
                   child: Image.asset(dataList["gambar"]),
                 ),
               ),
-              title: dataList["Nama"],
-              subtitle: dataList["kelas2"],
+              title: Text(dataList["Nama"]),
+              subtitle: Text(dataList["kelas2"]),
             ),
 
             // child:Image.asset('assets/strees.png'),

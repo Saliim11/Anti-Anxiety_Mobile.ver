@@ -113,7 +113,7 @@ class _PasienState extends State<Pasien> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list_rounded),
+            icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],

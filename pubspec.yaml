@@ -1,7 +1,7 @@
 name: anti_anxiety
 description: A new Flutter project.
 publish_to: "none"
-version: 0.2.1
+version: 1.4.0
 
 environment:
   sdk: ">=2.19.2 <3.0.0"
@@ -9,10 +9,12 @@ environment:
 dependencies:
   carousel_slider: ^4.2.1
   cloud_firestore: ^4.5.2
+  crypto: ^3.0.3
   firebase_auth: ^4.4.2
   firebase_core: ^2.10.0
   flutter:
     sdk: flutter
+  flutter_phone_direct_caller: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -23,4 +25,6 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/strees.png
+    - assets/melotot.jpg
     - assets/
