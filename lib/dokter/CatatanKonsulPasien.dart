@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'BeriCatatanKonsultasi.dart';
 import 'dart:async';
+import 'package:anti_anxiety/Firebase/login_register_auth/auth.dart';
 
 class CatatanKonsulPasien extends StatefulWidget {
   const CatatanKonsulPasien({Key? key});
@@ -14,8 +15,6 @@ class CatatanKonsulPasien extends StatefulWidget {
 class _CatatanKonsulPasienState extends State<CatatanKonsulPasien> {
   List<Map<String, dynamic>> items = [];
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? subscription;
-
-  
 
   @override
   void initState() {
@@ -29,9 +28,29 @@ class _CatatanKonsulPasienState extends State<CatatanKonsulPasien> {
     super.dispose();
   }
 
+  Future<String> getConnectID() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        String uid = user.uid;
+        DocumentSnapshot<Map<String, dynamic>> snapshot =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        if (snapshot.exists) {
+          String connectID = snapshot.data()?['connect_id'] ?? '';
+          return connectID;
+        }
+      }
+      return '';
+    } catch (e) {
+      print('Error fetching connect ID: $e');
+      return '';
+    }
+  }
+
   Future<void> getCatatanKonsultasi() async {
     try {
-      String pasienUid = 'NFMFYVi6hSX7ySe4INtgixtLOvF2';
+      String pasienUid = await getConnectID();
+      print(pasienUid);
       subscription = FirebaseFirestore.instance
           .collection('catatan_konsultasi')
           .where('id_pasien', isEqualTo: pasienUid)

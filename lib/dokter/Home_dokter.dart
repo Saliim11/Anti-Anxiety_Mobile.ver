@@ -77,14 +77,14 @@ class _HomePageDokterState extends State<HomePageDokter> {
         final pasienDocSnapshot = await pasienDocRef.get();
 
         // Update "connect_id" field in docA to empty
-      await userDocRef.update({'connect_id': ''});
+        await userDocRef.update({'connect_id': ''});
 
-      // Update "connect_id" field in docB to empty
-      await pasienDocRef.update({'connect_id': ''});
+        // Update "connect_id" field in docB to empty
+        await pasienDocRef.update({'connect_id': ''});
 
-      setState(() {
-        isButtonEnabled = false;
-      });
+        setState(() {
+          isButtonEnabled = false;
+        });
       }
 
       const snackBar = SnackBar(
