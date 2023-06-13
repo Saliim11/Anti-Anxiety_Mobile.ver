@@ -29,6 +29,7 @@ class _NotePageState extends State<NotePage> {
           .where('id_pasien', isEqualTo: currentUserUID)
           .get();
 
+      // "isiList" : data["formFirebase"]
       querySnapshot.docs.forEach((doc) {
         final data = doc.data();
         final consultationNote = {
